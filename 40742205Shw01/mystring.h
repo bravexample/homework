@@ -89,7 +89,7 @@ char *mystrstr(const char *haystack , const char *needle) {
         return NULL;
 
     size_t i = 0;
-    for (; *haystack; haystack++) {
+    for (; *haystack; haystack++)
         if (*haystack == *needle) {
             for (i = 0; needle[i]; i++)
                 if (haystack[i] != needle[i])
@@ -98,7 +98,6 @@ char *mystrstr(const char *haystack , const char *needle) {
             if (!needle[i])
                 return (char *)haystack;
         }
-    }
 
     return NULL;
 }
@@ -134,14 +133,13 @@ char *mystrtok(char *str, const char *delim) {
     }
 
     size_t j = 0;
-    for (i = 0; mystrtok_ptr[i]; i++) {
+    for (i = 0; mystrtok_ptr[i]; i++)
         for (j = 0; delim[j]; j++)
             if (mystrtok_ptr[i] == delim[j]) {
                 mystrtok_ptr[i] = '\0';
                 mystrtok_save = *(mystrtok_ptr + i + 1) ? mystrtok_ptr + i + 1 : NULL;
                 return mystrtok_ptr;
             }
-    }
 
     mystrtok_save = NULL;
     return mystrtok_ptr;
