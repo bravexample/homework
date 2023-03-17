@@ -84,7 +84,7 @@ char *mystrpbrk(const char *s, const char *accept) {
     return NULL;
 }
 
-char *mystrstr(const char *haystack , const char *needle) {
+char *mystrstr(const char *haystack, const char *needle) {
     if  (!haystack || !needle)
         return NULL;
 
