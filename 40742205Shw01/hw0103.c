@@ -9,17 +9,17 @@ int main() {
     sAbacus *abacus3 = abacus_init();
 
     // Set the values of abacus and abacus2 to "1234" and "5678"
-    if(abacus_set(abacus, "1234") != 0) {
+    if(abacus_set(abacus, "") != 0) {
         printf("Error: Set operation failed\n");
         return -1;
     }
-    if(abacus_set(abacus2, "5678") != 0) {
+    if(abacus_set(abacus2, "") != 0) {
         printf("Error: Set operation failed\n");
         return -1;
     }
 
     // Add abacus and abacus2, store result in abacus3
-    if(abacus_add(abacus3, *abacus, *abacus2) != 0) {
+    if(abacus_add(abacus3, *abacus2, *abacus) != 0) {
         printf("Error: Add operation failed\n");
         return -1;
     }
