@@ -208,12 +208,11 @@ int32_t abacus_print(sAbacus a) {
     }
 
     for (size_t i = 0; i < 2; i++) {
-        for (size_t j = start; j < a.number; j++) {
+        for (size_t j = start; j < a.number; j++)
             if (a.pUpperRod[j] == i)
                 printf("*");
             else
                 printf(" ");
-        }
         
         printf("\n");
     }
