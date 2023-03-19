@@ -100,7 +100,7 @@ int main(void) {
 
                 puts("");
             } else {
-                for (; *position != ','; position++)
+                for (; *position != ',' && *position != ' '; position++)
                     printf("%c", *position);
                 
                 puts("");
