@@ -102,8 +102,10 @@ int32_t abacus_add(sAbacus *pA, sAbacus b, sAbacus c) {
         result->pLowerRod[k] = temp % 5;
     }
 
-    if ((int )result->number + (int )over > 255)
+    if ((int )result->number + (int )over > 255) {
+        abacus_free(result);
         return -1;
+    }
 
     pA->number = result->number + over;
     
@@ -122,6 +124,7 @@ int32_t abacus_add(sAbacus *pA, sAbacus b, sAbacus c) {
         pA->pLowerRod[i + over] = result->pLowerRod[i];
     }
 
+    abacus_free(result);
     return 0;
 }
 
@@ -167,8 +170,10 @@ int32_t abacus_del(sAbacus *pA, sAbacus b, sAbacus c) {
         result->pLowerRod[i] = temp % 5;
     }
 
-    if (less)
+    if (less) {
+        abacus_free(result);
         return -1;
+    }
     
     pA->number = result->number;
 
@@ -185,6 +190,7 @@ int32_t abacus_del(sAbacus *pA, sAbacus b, sAbacus c) {
         pA->pLowerRod[i] = result->pLowerRod[i];
     }
 
+    abacus_free(result);
     return 0;
 }
 
