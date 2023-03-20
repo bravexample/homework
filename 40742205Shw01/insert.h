@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int32_t strinsert(char **ppResult, const char *pStr1, int32_t location, const char *pStr2) {
-    if (!pStr1 && !pStr2)
+    if (!ppResult || (!pStr1 && !pStr2))
         return -1;
 
     if (!pStr1)
