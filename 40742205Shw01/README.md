@@ -17,7 +17,7 @@ please install noto-fonts-cjk or other chinese fonts you prefer.
 - include stdio.h
 - include stdlib.h
 - include time.h
-- 實作函式內容
+- 實作函式內容  
 以下為各檔案的介紹。  
   
 # mystring
