@@ -22,13 +22,18 @@ please install noto-fonts-cjk or other chinese fonts you prefer.
 **以下為各檔案的介紹。**  
   
 # mystring.h
-- mystrchr、mystrrchr：傳入空指標會直接回傳 0 ，'\0' 也被視為字串內容。
-- mystrspn、mystrstr：只要其中一個指標為 NULL 就會回傳 0 。
-- mystrcspn：const char *s 若為 NULL 就會回傳 0 ，  
+- mystrchr、mystrrchr：  
+傳入空指標會直接回傳 0 ，'\0' 也被視為字串內容。
+- mystrspn、mystrstr：  
+只要其中一個指標為 NULL 就會回傳 0 。
+- mystrcspn：  
+const char *s 若為 NULL 就會回傳 0 ，  
 const char *reject 若為 NULL 會執行 reject = ""; 。
-- mystrpbrk：const char *s 若為 NULL 就會回傳 0 ，  
+- mystrpbrk：  
+const char *s 若為 NULL 就會回傳 0 ，  
 const char *accept 若為 NULL 會回傳 (char *)s; 。
-- mystrtok：const char *delim 若為 NULL 就會回傳 0 ，  
+- mystrtok：  
+const char *delim 若為 NULL 就會回傳 0 ，  
 使用 char *mystrtok_ptr 和 char *mystrtok_save 儲存資料，  
 **請不要重複宣告或使用他們**
   
