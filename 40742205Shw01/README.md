@@ -64,5 +64,7 @@ int32_t location 大於 pStr1 的長度時也會回傳 -1 。
 # oop.h
 我沒有做任何錯誤處理，傳入空指標保證 segmentation fault 。  
 **可以的話請不要做這種事。**
+  
 
+  
 **感謝您的閱讀。**
