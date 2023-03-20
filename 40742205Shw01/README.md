@@ -55,7 +55,7 @@ int32_t location 大於 pStr1 的長度時也會回傳 -1 。
 不會改變 sAbacus.number ，  
 如 123 - 123 ， sAbacus.number = 3 ，儲存的值為 0 。  
 若結果為負數會回傳 -1 。
-- abacus_print：
+- abacus_print：  
 不會印出開頭的 0 ，若 pUpperRod 與 pLowerRod 皆為 0 則會印出 0 。
   
 # hw0104.c
