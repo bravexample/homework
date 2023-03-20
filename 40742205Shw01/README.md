@@ -51,7 +51,7 @@ int32_t location 大於 pStr1 的長度時也會回傳 -1 。
 - abacus_add：  
 傳入空指標會回傳 -1 ，  
 溢位時會進位，若超過 255 也會回傳 -1 。
-- abacus_del：
+- abacus_del：  
 不會改變 sAbacus.number ，  
 如 123 - 123 ， sAbacus.number = 3 ，儲存的值為 0 。  
 若結果為負數會回傳 -1 。
