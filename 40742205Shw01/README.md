@@ -38,3 +38,31 @@ const char *delim 若為 NULL 就會回傳 0 ，
 **請不要重複宣告或使用他們**
   
 # insert.h
+char **ppResult 為 NULL 會回傳 -1 ，  
+const char *pStr1 與 const char *pStr2 皆為 NULL 時會回傳 -1 ，  
+int32_t location 大於 pStr1 的長度時也會回傳 -1 。  
+若 pStr1 或 pStr2 之一為 0 會指派 "" 。
+  
+# abacus.h
+- abacus_init：  
+使用 calloc 。
+- abacus_set：  
+傳入空指標或字串長度超過 255 就會回傳 -1 。
+- abacus_add：  
+傳入空指標會回傳 -1 ，  
+溢位時會進位，若超過 255 也會回傳 -1 。
+- abacus_del：
+不會改變 sAbacus.number ，  
+如 123 - 123 ， sAbacus.number = 3 ，儲存的值為 0 。  
+若結果為負數會回傳 -1 。
+- abacus_print：
+不會印出開頭的 0 ，若 pUpperRod 與 pLowerRod 皆為 0 則會印出 0 。
+  
+# hw0104.c
+沒什麼好說的，就 JSON Reader 。
+  
+# oop.h
+我沒有做任何錯誤處理，傳入空指標保證 segmentation fault 。  
+**可以的話請不要做這種事。**
+
+**感謝您的閱讀。**
