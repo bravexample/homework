@@ -1,2 +1,2 @@
 all:
-	gcc -O2 -std=c11 -Wall -Werror main.c
+	g++ -O2 -std=c++17 -Wall -Werror main.cpp
