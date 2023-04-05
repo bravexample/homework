@@ -24,20 +24,20 @@ typedef struct _sMatrix {
 } sMatrix;  
 - matrix_init：  
 只要 m 或 n 為零，回傳 -1 。
-- matrix_free：
+- matrix_free：  
 若 pA 為空，回傳 -1 。
-- matrix_set：
+- matrix_set：  
 執行 pM->data[m][n] = value; 。  
 m 或 n 超出 pM 範圍就回傳 -1 。
-- matrix_print：
+- matrix_print：  
 若 pM 為空，函式回傳。（ void 你還指望我回三小，哭阿紀老）
-- matrix_add：
+- matrix_add：  
 只要 pB 與 pC 大小不相等或為零，回傳 -1 。
-- matrix_multiply：
+- matrix_multiply：  
 只要 pB->column 與 pC->row 不相等或為零，回傳 -1 。
-- matrix_transpose：
+- matrix_transpose：  
 若 pA 為空，回傳 -1 。
-- matrix_det：
+- matrix_det：  
 若 pA 或 pAns 為空或 pA 不是方陣，回傳 -1 。
 
 # hw0202
