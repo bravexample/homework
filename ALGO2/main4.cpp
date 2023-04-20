@@ -10,12 +10,6 @@
 // std namespace
 using namespace std;
 
-// function of comparing segments
-bool compare(pair<int, int> &a, pair<int, int> &b)
-{
-    return a.first < b.first;
-}
-
 // main function
 int main()
 {
@@ -32,18 +26,15 @@ int main()
     for (int i = 0; i < N; i++)
     {
         scanf("%d %d", &input.first, &input.second);
-        if (input.first == input.second)
-            continue;
-
-        segments.push_back(input);
+        if (input.first < input.second)
+            segments.push_back(input);
     }
 
     // Sort the segments
-    sort(segments.begin(), segments.end(), compare);
+    sort(segments.begin(), segments.end());
 
     // Count the minimum posible number of segments
     // and the total duration of time without any speakers speaking
-    int added = 0;
     int count = 0;
     int duration = 0;
     vector<pair<int, int>> segment_pair = {make_pair(-1, -1), make_pair(-1, 0)};

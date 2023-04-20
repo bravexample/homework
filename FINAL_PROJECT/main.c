@@ -1,13 +1,13 @@
 // Main process for the final project
 
 // Libraries
-// #include "somethingelse.h"
+#include "init.h"
 
 // Main function
-int32_t main()
+int main()
 {
     // Initialize
-    // project_init();
+    project_init();
 
     // Main loop
     // while (1)
@@ -15,6 +15,9 @@ int32_t main()
     //     // Update
     //     // project_update();
     // }
+    
+    // Print the map for debugging
+    print_map();
 
     // Exit program
     return 0;
