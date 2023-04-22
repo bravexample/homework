@@ -85,7 +85,6 @@ static inline void init_map()
 
     // Assign the area array to the map
     for (int i = 0; i < AREA_NUM;)
-    {
         for (int j = 1; j <= 5; j++)
         {
             // Area space of the line
@@ -93,7 +92,6 @@ static inline void init_map()
             for (int k = 1; k <= space; k++)
                 fill_area_of_the_map(map, area[i++], k, j);
         }
-    }
 
     // Bulid Harbor
     map[7][2] = map[7][24] = map[13][24] = map[23][13] = Harbor_Any;
