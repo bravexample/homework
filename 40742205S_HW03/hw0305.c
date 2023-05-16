@@ -10,8 +10,30 @@
 #include <sys/stat.h>
 #include "midi.h"
 
-// Max path length
+// Some constants
 #define MAX_PATH_LEN 4096
+#define MAX_INSTRUMENT_NAME_LEN 64
+
+// VLV
+void WriteVarLen(int32_t value, FILE *outfile) {
+    int32_t buffer;
+    buffer = value & 0x7f;
+    while((value >>= 7) > 0)
+    {
+        buffer <<= 8;
+        buffer |= 0x80;
+        buffer += (value &0x7f);
+    }
+
+    while (1)
+    {
+        putc(buffer,outfile);
+        if(buffer & 0x80)
+            buffer >>= 8;
+        else
+            break;
+    }
+}
 
 // Main
 int32_t main(void) {
@@ -75,7 +97,7 @@ int32_t main(void) {
     // Get the number of tracks
     header_chunk.track_count = 0;
     for (uint32_t i = 0; i < input_stat.st_size; i++) {
-        if (input_mmap[i] == '\n')
+        if (input_mmap[i] == '[')
             header_chunk.track_count++;
     }
 
@@ -110,12 +132,71 @@ int32_t main(void) {
         fwrite(time_division, sizeof(uint8_t), 2, output_fp);
     }
 
-    // Write the track chunk
+    // The track chunk id
     uint8_t track_chunk_id[4] = {'M', 'T', 'r', 'k'};
+    // Channel
+    uint8_t channel[] = {0x00, 0xC0, 0x00};
+    // Variable for the input file
+    uint32_t i = 0;
     // Loop for each track
-    while (1) {
+    while (i < input_stat.st_size) {
+        // Variable for the track size
         int32_t track_size = 0;
         
+        // Get the instrument name
+        // Which is the first line of the track
+        // looks like [InstrumentName]
+        uint8_t instrument_name[MAX_INSTRUMENT_NAME_LEN] = {0};
+        for (uint32_t j = 0; input_mmap[i] != '\n'; i++)
+            if (input_mmap[i] != '[' && input_mmap[i] != ']') {
+                instrument_name[j] = input_mmap[i];
+                j++;
+            }
+        // Skip the newline character
+        i++;
+
+        // Setup instrument
+        channel[2] = 0;
+        for (; channel[2] < MAX_INSTRUMENTS; channel[2]++)
+            if (!strcmp(instrument_name, instruments[channel[2]]))
+                break;
+
+        // Loop for each note
+        // 1 to 7 means middle C to B
+        // 0 means rest
+        // - means double the length
+        // . means one and a half the length
+        // ; means half the length
+        // ' means octave up
+        // , means octave down
+        // [ means start of the next track
+        // ignore other characters
+        uint8_t last_note = 129;
+        uint8_t last_time = 0;
+        while (input_mmap[i] != '[' && i < input_stat.st_size) {
+            switch (input_mmap[i]) {
+            case '1':
+                if (last_note < 129) {
+                    // Write the note
+                }
+                
+                last_note = 60;
+                last_time
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '0':
+            case '-':
+            case '.':
+            case ';':
+            case '\'':
+            case ',':
+            default:
+            }
+        }
     }
 
     // Exit

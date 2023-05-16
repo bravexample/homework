@@ -3,7 +3,7 @@ all:
 	gcc -O3 -Werror hw0302.c -o hw0302
 	gcc -O3 -Werror hw0303.c -o hw0303
 	gcc -O3 -Werror hw0304.c cheat.c -o hw0304
-	gcc -O3 -Werror hw0305.c -o hw0305
+	#gcc -O3 -Werror hw0305.c -o hw0305
 
 clean:
 	rm -rf hw0301 hw0302 hw0303 hw0304 hw0305
