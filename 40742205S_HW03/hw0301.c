@@ -71,6 +71,8 @@ int main(int argc, char **argv) {
             // Set output file name
             output_filename = *argv;
         }
+        else
+            return -1;
 
         // Move to next flag
         argv++;
@@ -119,7 +121,7 @@ int main(int argc, char **argv) {
 
     // Encrypt or decrypt
     for (int i = 0, j = 0; i < input_file_size; i++, j++) {
-        if (j == key_file_size)
+        if (j >= key_file_size)
             j = 0;
         
         input[i] ^= key[j];
