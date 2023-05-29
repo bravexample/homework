@@ -3,9 +3,10 @@ all:
 	gcc -O3 -Werror -o hw0402 hw0402.c
 	gcc -O3 -Werror -o hw0403 hw0403.c
 	gcc -O3 -Werror -o hw0404 hw0404.c
+	gcc -O3 -Werror -o hw0406 hw0406.c
 
 clean:
-	rm -rf hw0401 hw0402 hw0403 hw0404
+	rm -rf hw0401 hw0402 hw0403 hw0404 hw0406
 
 first:
 	./hw0401 --count 10 --timestamp --interval 2
@@ -18,3 +19,6 @@ third:
 
 fourth:
 	./hw0404
+
+six:
+	./hw0406

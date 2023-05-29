@@ -1,0 +1,5 @@
+file 指令是直接讀取檔案內部的資料，再進行比對
+我試過 file README.md ，得到輸出 README.md: UTF-8 Unicode text
+如果有檢查副檔名的話應該會把它分成 markdown 文檔，
+也有可能是他沒有特別分類 markdown 文檔，
+但他一定不是光看副檔名來判斷檔案類型的。

@@ -1,0 +1,18 @@
+#define Peval(cmd) printf( #cmd ": %g\n", cmd )
+
+#cmd 的作用為將 cmd 從變數名稱轉換為字串，
+非常適合用於輸出 debug 訊息時使用，
+如：
+#define PRINT_INT(var) printf("the value of "#var" is: %d\n", var)
+
+#include <stdio.h>
+
+int main() {
+    int temp = 0;
+    PRINT_INT(temp);
+
+    return 0;
+}
+
+output:
+the value of temp is: 0
