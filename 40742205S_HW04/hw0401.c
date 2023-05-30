@@ -16,12 +16,172 @@
                           "\t-t, --timestamp Display the timestamp.\n" \
                           "\t-h, --help Display this description.\n")
 
-// define the maximal length of a line
-#define MAX_LINE_LENGTH 512
-// define the maximal length of a timestamp
+// function to get total cpu time
+long long get_total_cpu_time() {
+    long long result = 0;
+    // open cpu time file
+    FILE *fp = fopen("/proc/stat", "rb");
+    if (fp == NULL) {
+        perror("fopen /proc/stat");
+        exit(EXIT_FAILURE);
+    }
+    // move to the first data
+    fseek(fp, 5, SEEK_SET);
+    // loop to get the data
+    for (int i = 0; i < 10; i++) {
+        long long temp = 0;
+        fscanf(fp, "%lld", &temp);
+        result += temp;
+    }
+    fclose(fp);
+    return result;
+}
+
+// macro for max length of filename
+#define MAX_PID_FILENAME_LENGTH 32
+// function to get the process cpu time
+long long get_process_cpu_time(char *process) {
+    long long result = 0;
+    // create filename
+    char filename[MAX_PID_FILENAME_LENGTH];
+    sprintf(filename, "/proc/%s/stat", process);
+    // open file
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        printf("fopen %s failed\n", filename);
+        exit(EXIT_FAILURE);
+    }
+    // move to the first data
+    for (int i = 0; i < 13;) {
+        if (fgetc(fp) == ' ') {
+            i++;
+        }
+    }
+    // get the data
+    for (int i = 0; i < 4; i++) {
+        long long temp = 0;
+        fscanf(fp, "%lld", &temp);
+        result += temp;
+    }
+    fclose(fp);
+    return result;
+}
+
+// macro for max length
+#define MAX_PROCESS_NUM_LENGTH 32
+long long get_number_of_cores() {
+    // get the number of core
+    system("grep -E 'processor' /proc/cpuinfo > hw0401_data/cores");
+    FILE *cores = fopen("hw0401_data/cores", "rb");
+    if (cores == NULL) {
+        perror("fopen cores");
+        exit(EXIT_FAILURE);
+    }
+    // count the number of lines
+    long long cores_num = 0;
+    char temp[MAX_PROCESS_NUM_LENGTH];
+    while (fgets(temp, MAX_PROCESS_NUM_LENGTH, cores) != NULL) {
+        cores_num++;
+    }
+    fclose(cores);
+    return cores_num;
+}
+
+// get the total memory size
+long long get_total_memory_size() {
+    long long result = 0;
+    // open memory file
+    FILE *fp = fopen("/proc/meminfo", "rb");
+    if (fp == NULL) {
+        perror("fopen /proc/meminfo");
+        exit(EXIT_FAILURE);
+    }
+    // move to the data
+    fseek(fp, 10, SEEK_SET);
+    // get the data
+    fscanf(fp, "%lld", &result);
+    fclose(fp);
+    return result;
+}
+
+// get the process memory usage
+long long get_process_memory_usage(char *process) {
+    long long result = 0;
+    // create filename
+    char filename[MAX_PID_FILENAME_LENGTH];
+    sprintf(filename, "/proc/%s/stat", process);
+    // open file
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        printf("fopen %s failed\n", filename);
+        exit(EXIT_FAILURE);
+    }
+    // move to the first data
+    for (int i = 0; i < 23;) {
+        if (fgetc(fp) == ' ') {
+            i++;
+        }
+    }
+    // get the data
+    fscanf(fp, "%lld", &result);
+    // get page size
+    long long page_size = getpagesize();
+    // get the memory usage
+    result *= page_size / 1024;
+    fclose(fp);
+    return result;
+}
+
+// macro for max length of timestamp
 #define MAX_TIMESTAMP_LENGTH 32
-// define the maximal length of a stat
-#define MAX_STAT_LENGTH 384
+// get timestamp
+char *get_timestamp() {
+    // create timestamp
+    if (system("date \"+%F %T\" > hw0401_data/time") < 0) {
+        perror("system date");
+        return 0;
+    }
+    // open timestamp file
+    FILE *fp = fopen("hw0401_data/time", "rb");
+    if (fp == NULL) {
+        perror("fopen hw0401_data/time");
+        return 0;
+    }
+    // get the timestamp
+    char *result = malloc(MAX_TIMESTAMP_LENGTH);
+    fgets(result, MAX_TIMESTAMP_LENGTH, fp);
+    // remove the newline
+    result[strlen(result) - 1] = '\0';
+    fclose(fp);
+    return result;
+}
+
+// macro for max length of process name
+#define MAX_PROCESS_NAME_LENGTH 256
+char *get_process_name(char *process) {
+    // create filename
+    char filename[MAX_PID_FILENAME_LENGTH];
+    sprintf(filename, "/proc/%s/stat", process);
+    // open file
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        printf("fopen %s failed\n", filename);
+        exit(EXIT_FAILURE);
+    }
+    // move to the data
+    for (char c; c != '(';) {
+        c = fgetc(fp);
+    }
+    // get the name
+    char *result = malloc(MAX_PROCESS_NAME_LENGTH);
+    int i = 0;
+    for (char c; (c = fgetc(fp)) != ')'; i++) {
+        result[i] = c;
+    }
+    result[i] = '\0';
+    fclose(fp);
+    return result;
+}
 
 // main
 int main(int argc, char **argv) {
@@ -99,7 +259,7 @@ int main(int argc, char **argv) {
     }
     else {
         // open record file
-        FILE *fp = fopen("process", "wb");
+        FILE *fp = fopen("hw0401_data/process", "wb");
         if (fp == NULL) {
             printf("You deleted the file to record the process id.\n");
             return 0;
@@ -110,92 +270,60 @@ int main(int argc, char **argv) {
         fclose(fp);
     }
 
-    // generate cat /proc/pid/stat
-    char *path = malloc(strlen("cat /proc/") + strlen(process) + strlen("/stat > hw0401_data/stat") + 1);
-    if (path == NULL) {
-        perror("malloc path of stat");
-        return 0;
-    }
-    sprintf(path, "cat /proc/%s/stat > hw0401_data/stat", process);
-
-    // file pointer and array for time
+    // string for timestamp
     char *timestamp_str = NULL;
-    int timestamp_length = 0;
-    FILE *fp_time = NULL;
-    if (timestamp) {
-        timestamp_str = malloc(MAX_TIMESTAMP_LENGTH);
-        fp_time = fopen("hw0401_data/time", "rb");
-        if (fp_time == NULL) {
-            printf("You deleted the file to record the timestamp.\n");
-            return 0;
-        }
-    }
-    else {
-        timestamp_str = "";
-    }
-    // file pointer and array for stat
-    char *stat_str = malloc(MAX_STAT_LENGTH);
-    int stat_length = 0;
-    FILE *fp_stat = fopen("hw0401_data/stat", "rb");
-    if (fp_stat == NULL) {
-        printf("You deleted the file to record the process information.\n");
-        return 0;
-    }
-    // array for output
-    char *output = malloc(MAX_LINE_LENGTH);
+    // variable for cpu core
+    long long cpu_cores = get_number_of_cores();
+    // variable for cpu time
+    long long total_cpu_last = get_total_cpu_time();
+    long long total_cpu_now = 0;
+    long long process_cpu_last = get_process_cpu_time(process);
+    long long process_cpu_now = 0;
+    // variable for memory usage
+    long long total_memory = get_total_memory_size();
+    long long process_memory = 0;
+    // get process name
+    char *process_name = get_process_name(process);
     // loop
     while (count > 0) {
+        // interval
+        sleep(interval);
+
         // get timestamp
         if (timestamp) {
-            if (system("date \"+%F %T\" > hw0401_data/time") < 0) {
-                perror("system date");
-                return 0;
-            }
-
-            // check length
-            fseek(fp_time, 0, SEEK_END);
-            timestamp_length = ftell(fp_time);
-
-            // read timestamp
-            rewind(fp_time);
-            if (fread(timestamp_str, timestamp_length, 1, fp_time) != 1) {
-                perror("fread timestamp");
-                return 0;
-            }
-            timestamp_str[timestamp_length - 1] = '\0'; // remove '\n'
+            timestamp_str = get_timestamp();
         }
 
-        // get stat
-        if (system(path) < 0) {
-            perror("system stat");
-            return 0;
-        }
+        // get cpu time
+        total_cpu_now = get_total_cpu_time();
+        process_cpu_now = get_process_cpu_time(process);
+        // get cpu usage
+        double cpu_usage = (double)(process_cpu_now - process_cpu_last) * (double)100.0 * (double)cpu_cores / (double)(total_cpu_now - total_cpu_last);
 
-        // check length
-        fseek(fp_stat, 0, SEEK_END);
-        stat_length = ftell(fp_stat);
-
-        // read stat
-        rewind(fp_stat);
-        if (fread(stat_str, stat_length, 1, fp_stat) != 1) {
-            perror("fread stat");
-            return 0;
-        }
-        stat_str[stat_length - 1] = '\0'; // remove '\n'
-
-        // setup the output message
-        sprintf(output, "%s %s: %s", timestamp_str, process, stat_str);
+        // get process memory usage
+        process_memory = get_process_memory_usage(process);
+        // get memory usage percentage
+        double memory_usage = (double)process_memory * (double)100.0 / (double)total_memory;
 
         // output
-        puts(output);
+        if (timestamp) {
+            printf("%s %s: %.1lf(%%CPU) %.1lf(%%MEM) %s(COMMAND)\n", 
+                    timestamp_str, process, cpu_usage, memory_usage, process_name);
+            free(timestamp_str);
+        }
+        else {
+            printf("%s: %.1lf(%%CPU) %.1lf(%%MEM) %s(COMMAND)\n", 
+                    process, cpu_usage, memory_usage, process_name);
+        }
 
+        // now to last
+        total_cpu_last = total_cpu_now;
+        process_cpu_last = process_cpu_now;
+        
         // check count
         if (count < 1001) {
             count--;
         }
-
-        // interval
-        sleep(interval);
     }
 
     // exit
