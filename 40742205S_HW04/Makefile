@@ -1,6 +1,6 @@
 all:
 	gcc -o hw0401 hw0401.c
-	#gcc -o hw0402 hw0402.c
+	gcc -o hw0402 hw0402.c
 	gcc -o hw0403 hw0403.c
 	gcc -o hw0404 hw0404.c
 	gcc -o hw0405 hw0405.c -lcurl -lxml2 -I/usr/include/libxml2
@@ -10,7 +10,7 @@ clean:
 	rm -rf hw0401 hw0402 hw0403 hw0404 hw0405 hw0406
 
 first:
-	./hw0401 -t 2447
+	./hw0401 -t 1
 
 second:
 	./hw0402
