@@ -75,5 +75,5 @@ Ncurses 的基本要素如下：
 - attron(attr) / wattron(win, attr) / attroff(attr) / wattroff(win, attr)  
 開啟或關閉螢幕 / 特定視窗的內容屬性。
   
-**請看範例程式 main.c 。使用 make 指令即可編譯與執行。**  
-**請先看完註解再 make 。**
+**請看範例程式 bonus.c 。使用 make 指令即可編譯。**  
+**請先看完註解再 ./bonus 。**
