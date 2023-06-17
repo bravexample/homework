@@ -316,6 +316,12 @@ int main(int argc, char **argv) {
                     process, cpu_usage, memory_usage, process_name);
         }
 
+        printf("%lld/%lld, %lld/%lld\n",
+               (process_cpu_now - process_cpu_last),
+               total_cpu_now - total_cpu_last,
+               process_memory,
+               total_memory);
+
         // now to last
         total_cpu_last = total_cpu_now;
         process_cpu_last = process_cpu_now;
