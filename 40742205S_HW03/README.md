@@ -70,7 +70,7 @@ Your choice:
 # hw0305.c
 我只寫出一個能寫入MIDI的header的程式...  
 
-# hw0306.md
+# hw0306.txt
 恩...沒啥好說  
   
 **檔案結尾**
